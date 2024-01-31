@@ -1,8 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10&type=multiple';
+export const fetchQuestions = async (amount = 10, difficulty = "easy") => {
+  try {
+    const response = await axios.get(
+      `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`
+    );
 
-export const fetchQuestions = async () => {
-  const response = await axios.get(API_ENDPOINT);
-  return response.data;
+    if (!response.data.results || !Array.isArray(response.data.results)) {
+      throw new Error("Invalid data format");
+    }
+
+    console.log(response.data.results);
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching trivia questions:", error);
+    return [];
+  }
 };
