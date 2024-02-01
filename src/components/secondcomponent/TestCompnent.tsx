@@ -11,7 +11,12 @@ const TestComponent = () => {
     getQuestions();
   }, []);
 
-  return <div>Check the console for results</div>;
+  return (
+    <>
+      <div>Check the console for results</div>
+      <div>проверка</div>
+    </>
+  );
 };
 
 export default TestComponent;
