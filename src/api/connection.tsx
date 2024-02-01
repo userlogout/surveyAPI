@@ -10,7 +10,7 @@ export const fetchQuestions = async (amount = 10, difficulty = "easy") => {
       throw new Error("Invalid data format");
     }
 
-    console.log(response.data.results);
+    // console.log(response.data.results);
     return response.data.results;
   } catch (error) {
     console.error("Error fetching trivia questions:", error);

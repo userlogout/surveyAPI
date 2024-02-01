@@ -5,22 +5,38 @@ import { fetchQuestions as fetchQuestionsApi } from "../../api/connection";
 interface Question {}
 
 // Определение типа для состояния
+// interface QuizState {
+//   questions: Question[];
+//   currentQuestionIndex: number;
+//   answers: { [key: string]: string[] };
+//   score: number;
+//   loading: boolean;
+//   error: string | null;
+// }
 interface QuizState {
-  questions: Question[];
-  currentQuestionIndex: number;
-  answers: { [key: string]: string[] };
-  score: number;
-  loading: boolean;
-  error: string | null;
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: { [key: string]: string[] };
+  question: string;
+  type: string;
 }
 
+// const initialState: QuizState = {
+//   questions: [],
+//   currentQuestionIndex: 0,
+//   answers: {},
+//   score: 0,
+//   loading: false,
+//   error: null || "",
+// };
 const initialState: QuizState = {
-  questions: [],
-  currentQuestionIndex: 0,
-  answers: {},
-  score: 0,
-  loading: false,
-  error: null || "",
+  category: "",
+  correct_answer: "",
+  difficulty: "",
+  incorrect_answers: {},
+  question: "",
+  type: "",
 };
 
 export const fetchQuestions = createAsyncThunk(
@@ -35,40 +51,28 @@ const quizSlice = createSlice({
   name: "quiz",
   initialState,
   reducers: {
-    answerQuestion: (
+    category: (state, action: PayloadAction<string>) => {
+      state.category = action.payload;
+    },
+    correct_answer: (state, action: PayloadAction<string>) => {
+      state.correct_answer = action.payload;
+    },
+    difficulty: (state, action: PayloadAction<string>) => {
+      state.category = action.payload;
+    },
+    incorrect_answers: (
       state,
-      action: PayloadAction<{ questionId: string; answer: string[] }>
+      action: PayloadAction<{ [key: string]: string[] }>
     ) => {
-      // тут будет ответ
+      state.incorrect_answers = action.payload;
     },
-    nextQuestion: (state) => {
-      // тут будет логика для перехода к следующему вопросу
+    question: (state, action: PayloadAction<string>) => {
+      state.question = action.payload;
     },
-    calculateScore: (state) => {
-      // тут будет логика для расчета результата
-    },
-    resetQuiz: () => initialState,
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchQuestions.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(
-        fetchQuestions.fulfilled,
-        (state, action: PayloadAction<Question[]>) => {
-          state.questions = action.payload;
-          state.loading = false;
-        }
-      )
-      .addCase(fetchQuestions.rejected, (state, action) => {
-        state.error = action.error.message ?? null;
-        state.loading = false;
-      });
   },
 });
 
-export const { answerQuestion, nextQuestion, calculateScore, resetQuiz } =
+export const { category, correct_answer, difficulty, question } =
   quizSlice.actions;
 
 export default quizSlice.reducer;
