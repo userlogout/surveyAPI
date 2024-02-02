@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchQuestionsThunk } from "../../api/connection";
 import { getError, getLoading, getQuestions } from "../../redux/app/selectors";
 import { AppDispatch } from "../../redux/store";
+import he from "he";
 
 const TestComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -11,7 +12,7 @@ const TestComponent: React.FC = () => {
   const error = useSelector(getError);
 
   useEffect(() => {
-    dispatch(fetchQuestionsThunk({ amount: 10, difficulty: "easy" }));
+    dispatch(fetchQuestionsThunk());
   }, [dispatch]);
 
   if (loading) {
@@ -26,7 +27,7 @@ const TestComponent: React.FC = () => {
     <div>
       {questions.map((question, index) => (
         <div key={index}>
-          <h3>{question.question}</h3>
+          <h3>{he.decode(question.question)}</h3>
           {/* Остальная часть вопроса */}
         </div>
       ))}
