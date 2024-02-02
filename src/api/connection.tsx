@@ -1,42 +1,36 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// Определение типа для вопроса
-interface Question {
-  category: string;
-  correct_answer: string;
-  difficulty: string;
-  incorrect_answers: string[];
-  question: string;
-  type: string;
-}
-
-// Асинхронное действие для загрузки вопросов без токена сеанса
 export const fetchQuestionsThunk = createAsyncThunk(
   "quiz/fetchQuestions",
-  async () => {
+  async (
+    {
+      category,
+      difficulty,
+      limit,
+    }: { category: string; difficulty: string; limit: number },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axios.get("https://opentdb.com/api.php?amount=10");
+      const response = await axios.get("https://quizapi.io/api/v1/questions", {
+        params: {
+          apiKey: "AoDhxHO4xEBPTkgEN0C94hDEoPCfarpYNJgwJ1bV", //  API ключ из переменных окружения
+          category,
+          difficulty,
+          limit,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      // Проверка на наличие ошибок или недопустимых форматов данных
-      if (!response.data.results || !Array.isArray(response.data.results)) {
-        throw new Error("Invalid data format");
+      if (response.data && Array.isArray(response.data)) {
+        return response.data;
+      } else {
+        throw new Error("Invalid API response");
       }
-
-      // Преобразование и возврат результатов в нужный формат
-      const questions = response.data.results.map((question: any) => ({
-        category: question.category,
-        correct_answer: question.correct_answer,
-        difficulty: question.difficulty,
-        incorrect_answers: question.incorrect_answers,
-        question: question.question,
-        type: question.type,
-      }));
-
-      return questions as Question[];
     } catch (error) {
-      console.error("Error fetching trivia questions:", error);
-      throw error;
+      return rejectWithValue("Failed to fetch questions");
     }
   }
 );

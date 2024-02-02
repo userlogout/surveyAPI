@@ -1,25 +1,23 @@
+// src/redux/quizSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// В файле с quizSlice
 import { fetchQuestionsThunk } from "../../api/connection";
 
-// Определение типа для вопроса
 interface Question {
   category: string;
   correct_answer: string;
   difficulty: string;
   incorrect_answers: string[];
+  // Убедитесь, что question присутствует здесь:
   question: string;
   type: string;
 }
 
-// Определение типа для состояния
 interface QuizState {
   questions: Question[];
   loading: boolean;
   error: string | null;
 }
 
-// Начальное состояние
 const initialState: QuizState = {
   questions: [],
   loading: false,
@@ -34,6 +32,7 @@ const quizSlice = createSlice({
     builder
       .addCase(fetchQuestionsThunk.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(
         fetchQuestionsThunk.fulfilled,
@@ -43,7 +42,7 @@ const quizSlice = createSlice({
         }
       )
       .addCase(fetchQuestionsThunk.rejected, (state, action) => {
-        state.error = action.error.message ?? null;
+        state.error = action.payload as string;
         state.loading = false;
       });
   },

@@ -1,9 +1,10 @@
+// src/redux/store.ts
 import { configureStore } from "@reduxjs/toolkit";
-import quizSlice from "./app";
+import quizReducer from "./app";
 
 export const store = configureStore({
   reducer: {
-    quiz: quizSlice,
+    quiz: quizReducer,
   },
 });
 

@@ -1,38 +1,32 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchQuestionsThunk } from "../../api/connection";
-import { getError, getLoading, getQuestions } from "../../redux/app/selectors";
-import { AppDispatch } from "../../redux/store";
-import he from "he";
+import { AppDispatch, RootState } from "../../redux/store";
 
-const TestComponent: React.FC = () => {
+const QuizComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const questions = useSelector(getQuestions);
-  const loading = useSelector(getLoading);
-  const error = useSelector(getError);
+  const { questions, loading, error } = useSelector(
+    (state: RootState) => state.quiz
+  );
 
   useEffect(() => {
-    dispatch(fetchQuestionsThunk());
+    dispatch(
+      fetchQuestionsThunk({ category: "Linux", difficulty: "Easy", limit: 5 })
+    );
   }, [dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
       {questions.map((question, index) => (
         <div key={index}>
-          <h3>{he.decode(question.question)}</h3>
-          {/* Остальная часть вопроса */}
+          <p>{question.question}</p>
         </div>
       ))}
     </div>
   );
 };
 
-export default TestComponent;
+export default QuizComponent;
