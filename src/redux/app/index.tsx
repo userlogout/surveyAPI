@@ -1,4 +1,3 @@
-// src/redux/quizSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchQuestionsThunk } from "../../api/connection";
 
@@ -7,7 +6,6 @@ interface Question {
   correct_answer: string;
   difficulty: string;
   incorrect_answers: string[];
-  // Убедитесь, что question присутствует здесь:
   question: string;
   type: string;
 }
