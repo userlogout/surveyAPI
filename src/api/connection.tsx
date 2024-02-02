@@ -1,7 +1,20 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchQuestions = async (amount = 10, difficulty = "easy") => {
-  try {
+// Определение типа для вопроса
+interface Question {
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: string[];
+  question: string;
+  type: string;
+}
+
+// Асинхронное действие для загрузки вопросов
+export const fetchQuestionsThunk = createAsyncThunk(
+  "quiz/fetchQuestions",
+  async ({ amount, difficulty }: { amount: number; difficulty: string }) => {
     const response = await axios.get(
       `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`
     );
@@ -10,10 +23,6 @@ export const fetchQuestions = async (amount = 10, difficulty = "easy") => {
       throw new Error("Invalid data format");
     }
 
-    // console.log(response.data.results);
-    return response.data.results;
-  } catch (error) {
-    console.error("Error fetching trivia questions:", error);
-    return [];
+    return response.data.results as Question[];
   }
-};
+);

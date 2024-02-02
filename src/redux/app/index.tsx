@@ -1,78 +1,52 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { fetchQuestions as fetchQuestionsApi } from "../../api/connection";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// В файле с quizSlice
+import { fetchQuestionsThunk } from "../../api/connection";
 
 // Определение типа для вопроса
-interface Question {}
-
-// Определение типа для состояния
-// interface QuizState {
-//   questions: Question[];
-//   currentQuestionIndex: number;
-//   answers: { [key: string]: string[] };
-//   score: number;
-//   loading: boolean;
-//   error: string | null;
-// }
-interface QuizState {
+interface Question {
   category: string;
   correct_answer: string;
   difficulty: string;
-  incorrect_answers: { [key: string]: string[] };
+  incorrect_answers: string[];
   question: string;
   type: string;
 }
 
-// const initialState: QuizState = {
-//   questions: [],
-//   currentQuestionIndex: 0,
-//   answers: {},
-//   score: 0,
-//   loading: false,
-//   error: null || "",
-// };
-const initialState: QuizState = {
-  category: "",
-  correct_answer: "",
-  difficulty: "",
-  incorrect_answers: {},
-  question: "",
-  type: "",
-};
+// Определение типа для состояния
+interface QuizState {
+  questions: Question[];
+  loading: boolean;
+  error: string | null;
+}
 
-export const fetchQuestions = createAsyncThunk(
-  "quiz/fetchQuestions",
-  async ({ amount, difficulty }: { amount: number; difficulty: string }) => {
-    const questions = await fetchQuestionsApi(amount, difficulty);
-    return questions as Question[];
-  }
-);
+// Начальное состояние
+const initialState: QuizState = {
+  questions: [],
+  loading: false,
+  error: null,
+};
 
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
-  reducers: {
-    category: (state, action: PayloadAction<string>) => {
-      state.category = action.payload;
-    },
-    correct_answer: (state, action: PayloadAction<string>) => {
-      state.correct_answer = action.payload;
-    },
-    difficulty: (state, action: PayloadAction<string>) => {
-      state.category = action.payload;
-    },
-    incorrect_answers: (
-      state,
-      action: PayloadAction<{ [key: string]: string[] }>
-    ) => {
-      state.incorrect_answers = action.payload;
-    },
-    question: (state, action: PayloadAction<string>) => {
-      state.question = action.payload;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchQuestionsThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        fetchQuestionsThunk.fulfilled,
+        (state, action: PayloadAction<Question[]>) => {
+          state.questions = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(fetchQuestionsThunk.rejected, (state, action) => {
+        state.error = action.error.message ?? null;
+        state.loading = false;
+      });
   },
 });
-
-export const { category, correct_answer, difficulty, question } =
-  quizSlice.actions;
 
 export default quizSlice.reducer;

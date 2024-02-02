@@ -1,50 +1,50 @@
-import { useEffect, useState } from "react";
-import { fetchQuestions } from "../../api/connection";
+// import { useEffect, useState } from "react";
+// import { fetchQuestions } from "../../api/connection";
 
-interface Question {
-  question: string;
-  answers: string[];
-  // если они есть в  API, например correctAnswer, difficulty и т.д.
-}
+// interface Question {
+//   question: string;
+//   answers: string[];
 
-const QuizComponent: React.FC = () => {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+// }
 
-  useEffect(() => {
-    const loadQuestions = async () => {
-      const fetchedQuestions = await fetchQuestions();
-      setQuestions(fetchedQuestions);
-    };
+// const QuizComponent: React.FC = () => {
+//   const [questions, setQuestions] = useState<Question[]>([]);
+//   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-    loadQuestions();
-  }, []);
+//   useEffect(() => {
+//     const loadQuestions = async () => {
+//       const fetchedQuestions = await fetchQuestions();
+//       setQuestions(fetchedQuestions);
+//     };
 
-  const handleNextQuestion = () => {
-    setCurrentQuestionIndex((current) => current + 1);
-  };
+//     loadQuestions();
+//   }, []);
 
-  // Проверка, что вопросы загружены
-  if (questions.length === 0) return <div>Loading...</div>;
+//   const handleNextQuestion = () => {
+//     setCurrentQuestionIndex((current) => current + 1);
+//   };
 
-  const question = questions[currentQuestionIndex];
+//   // Проверка, что вопросы загружены
+//   if (questions.length === 0) return <div>Loading...</div>;
 
-  return (
-    <div>
-      <h2>Quiz App</h2>
-      <div>
-        <h3>{question.question}</h3>
-        {/* Пример отображения вариантов ответов */}
-        {question.answers.map((answer, index) => (
-          <div key={index}>
-            <input type="radio" id={answer} name="answer" value={answer} />
-            <label htmlFor={answer}>{answer}</label>
-          </div>
-        ))}
-      </div>
-      <button onClick={handleNextQuestion}>Next Question</button>
-    </div>
-  );
-};
+//   const question = questions[currentQuestionIndex];
 
-export default QuizComponent;
+//   return (
+//     <div>
+//       <h2>Quiz App</h2>
+//       <div>
+//         <h3>{question.question}</h3>
+//         {/* Пример отображения вариантов ответов */}
+//         {question.answers.map((answer, index) => (
+//           <div key={index}>
+//             <input type="radio" id={answer} name="answer" value={answer} />
+//             <label htmlFor={answer}>{answer}</label>
+//           </div>
+//         ))}
+//       </div>
+//       <button onClick={handleNextQuestion}>Next Question</button>
+//     </div>
+//   );
+// };
+
+// export default QuizComponent;
