@@ -18,13 +18,14 @@ export const fetchQuestionsThunk = createAsyncThunk(
       const url = `https://quizapi.io/api/v1/questions?apiKey=${apiKey}&category=${category}&difficulty=${difficulty}&limit=${limit}`;
       const response = await axios.get(url);
       if (response.data && Array.isArray(response.data)) {
-        return response.data; // Возврат данных, если все в порядке
+        console.log("url" + JSON.stringify(response.data));
+        return response.data;
       } else {
-        throw new Error("Invalid API response"); // Генерация ошибки, если ответ не соответствует ожиданиям
+        throw new Error("Invalid API response");
       }
     } catch (error) {
-      console.error("Error fetching trivia questions:", error); // Вывод информации об ошибке в консоль
-      return rejectWithValue("Failed to fetch questions"); // Возврат отклоненного промиса с сообщением об ошибке
+      console.error("Error fetching trivia questions:", error);
+      return rejectWithValue("Failed to fetch questions");
     }
   }
 );

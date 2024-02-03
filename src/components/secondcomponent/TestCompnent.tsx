@@ -1,13 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchQuestionsThunk } from "../../api/connection";
-import { AppDispatch, RootState } from "../../redux/store";
+import { answerQuestion, resetQuiz } from "../../redux/app/index"; // Импорт из slice
+import {
+  getCurrentQuestion,
+  getShowResults,
+  getScore,
+  getTotalScore,
+} from "../../redux/app/selectors";
+import { AppDispatch } from "../../redux/store";
 
 const QuizComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { questions, loading, error } = useSelector(
-    (state: RootState) => state.quiz
-  );
+  const currentQuestion = useSelector(getCurrentQuestion);
+  const showResults = useSelector(getShowResults);
+  const score = useSelector(getScore);
+  const totalScore = useSelector(getTotalScore);
+  const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
 
   useEffect(() => {
     dispatch(
@@ -15,16 +24,63 @@ const QuizComponent = () => {
     );
   }, [dispatch]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const handleAnswerChange = (answer: string, isChecked: boolean) => {
+    setSelectedAnswer([answer]);
+  };
+
+  const handleSubmit = () => {
+    if (currentQuestion) {
+      dispatch(
+        answerQuestion({
+          questionId: currentQuestion.id,
+          selectedAnswers: selectedAnswer,
+        })
+      );
+      setSelectedAnswer([]);
+    }
+  };
+
+  if (showResults) {
+    return (
+      <div>
+        <h2>Results</h2>
+        <p>
+          Your score is: {totalScore} out of{" "}
+          {Object.values(score).reduce((acc, value) => acc + value, 0)}
+        </p>
+        <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button>
+      </div>
+    );
+  }
+
+  if (!currentQuestion) return <div>Loading...</div>;
 
   return (
     <div>
-      {questions.map((question, index) => (
-        <div key={index}>
-          <p>{question.question}</p>
-        </div>
-      ))}
+      <h2>{currentQuestion?.question}</h2>
+      <form onSubmit={(e) => e.preventDefault()}>
+        {currentQuestion?.answers &&
+          Object.entries(currentQuestion.answers).map(([key, value]) => {
+            if (!value) return null;
+            return (
+              <div key={key}>
+                <label>
+                  <input
+                    type="radio"
+                    name="answer"
+                    value={key}
+                    checked={selectedAnswer.includes(key)}
+                    onChange={() => handleAnswerChange(key, true)}
+                  />
+                  {value}
+                </label>
+              </div>
+            );
+          })}
+        <button type="button" onClick={handleSubmit}>
+          Submit Answer
+        </button>
+      </form>
     </div>
   );
 };

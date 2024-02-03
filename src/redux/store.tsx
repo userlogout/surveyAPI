@@ -5,7 +5,7 @@ export const store = configureStore({
   reducer: {
     quiz: quizReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
