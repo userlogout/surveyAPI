@@ -24,7 +24,7 @@ const QuizComponent = () => {
     );
   }, [dispatch]);
 
-  const handleAnswerChange = (answer: string, isChecked: boolean) => {
+  const handleAnswerChange = (answer: string) => {
     setSelectedAnswer([answer]);
   };
 
@@ -70,7 +70,7 @@ const QuizComponent = () => {
                     name="answer"
                     value={key}
                     checked={selectedAnswer.includes(key)}
-                    onChange={() => handleAnswerChange(key, true)}
+                    onChange={() => handleAnswerChange(key)}
                   />
                   {value}
                 </label>
