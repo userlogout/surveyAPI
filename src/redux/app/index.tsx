@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchQuestionsThunk } from "../../api/connection";
 
-type CorrectAnswers = {
-  [key: string]: "true" | "false";
-};
+// type CorrectAnswers = {
+//   [key: string]: "true" | "false";
+// };
 
 interface Question {
   id: number;
@@ -71,28 +71,29 @@ const quizSlice = createSlice({
   reducers: {
     answerQuestion: (state, action: PayloadAction<Answer>) => {
       const { questionId, selectedAnswers } = action.payload;
-      const currentQuestion = state.questions.find(
+      const currentQuestionIndex = state.questions.findIndex(
         (question) => question.id === questionId
       );
+      if (currentQuestionIndex === -1) return;
+      const currentQuestion = state.questions[currentQuestionIndex];
 
-      if (!currentQuestion) return;
-
-      const isCorrect = selectedAnswers.every(
-        (answer) =>
-          currentQuestion.correct_answers[`${answer}_correct`] === "true"
-      );
+      const isCorrect = selectedAnswers.every((answer) => {
+        const answerKey =
+          `${answer}_correct` as keyof typeof currentQuestion.correct_answers;
+        return currentQuestion.correct_answers[answerKey] === "true";
+      });
 
       if (isCorrect) {
-        state.score[
-          currentQuestion.difficulty.toLowerCase() as keyof typeof state.score
-        ]++;
+        const difficultyKey =
+          currentQuestion.difficulty.toLowerCase() as keyof typeof state.score;
+        state.score[difficultyKey]++;
       }
 
       state.totalAnswered++;
       state.answers.push(action.payload);
 
       if (state.currentQuestionIndex < state.questions.length - 1) {
-        state.currentQuestionIndex += 1;
+        state.currentQuestionIndex++;
       } else {
         state.showResults = true;
       }
@@ -106,15 +107,15 @@ const quizSlice = createSlice({
       .addCase(fetchQuestionsThunk.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchQuestionsThunk.fulfilled, (state, action) => {
+      .addCase(fetchQuestionsThunk.fulfilled, (state, action: any) => {
         state.questions = action.payload;
         state.loading = false;
         state.currentQuestionIndex = 0;
         state.answers = [];
+        state.totalAnswered = 0;
         state.showResults = false;
       })
       .addCase(fetchQuestionsThunk.rejected, (state, action) => {
-        // TypeScript также знает, что action.error может быть использовано здесь
         state.error = action.error.message ?? null;
         state.loading = false;
       });
@@ -122,5 +123,4 @@ const quizSlice = createSlice({
 });
 
 export const { answerQuestion, resetQuiz } = quizSlice.actions;
-
 export default quizSlice.reducer;
