@@ -37,8 +37,6 @@ export const fetchQuestionsThunk = createAsyncThunk(
     const apiKey = import.meta.env.VITE_QUIZ_API_KEY;
     const difficulties = ["Easy", "Medium", "Hard"];
     let allQuestions: Question[] = [];
-    // const limits = { Easy: 3, Medium: 3, Hard: 2 }; //  распределения
-
     for (const difficulty of difficulties) {
       try {
         const response = await axios.get(
@@ -48,7 +46,6 @@ export const fetchQuestionsThunk = createAsyncThunk(
               apiKey: apiKey,
               category: "Linux",
               difficulty: difficulty,
-              // limit: 5, // Количество вопросов для каждого уровня сложности
               limit: 3,
             },
           }

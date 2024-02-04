@@ -7,6 +7,7 @@ import {
   getShowResults,
   getScore,
   getTotalScore,
+  getDifficultyCount,
 } from "../../redux/app/selectors";
 import { AppDispatch } from "../../redux/store";
 
@@ -16,6 +17,7 @@ const QuizComponent = () => {
   const showResults = useSelector(getShowResults);
   const score = useSelector(getScore);
   const totalScore = useSelector(getTotalScore);
+  const difficultyCount = useSelector(getDifficultyCount);
   const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
 
   useEffect(() => {
@@ -42,9 +44,15 @@ const QuizComponent = () => {
     return (
       <div>
         <h2>Results</h2>
+        <p>Your total score is: {totalScore}</p>
         <p>
-          Your score is: {totalScore} out of{" "}
-          {Object.values(score).reduce((acc, value) => acc + value, 0)}
+          Easy questions: {score.easy} / {difficultyCount.easy}
+        </p>
+        <p>
+          Medium questions: {score.medium} / {difficultyCount.medium}
+        </p>
+        <p>
+          Hard questions: {score.hard} / {difficultyCount.hard}
         </p>
         <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button>
       </div>
@@ -55,29 +63,24 @@ const QuizComponent = () => {
 
   return (
     <div>
-      <h2>{currentQuestion?.question}</h2>
+      <h2>{currentQuestion.question}</h2>
       <form onSubmit={(e) => e.preventDefault()}>
-        {currentQuestion?.answers &&
-          Object.entries(currentQuestion.answers).map(([key, value]) => {
-            if (!value) return null;
-            return (
-              <div key={key}>
-                <label>
-                  <input
-                    type="radio"
-                    name="answer"
-                    value={key}
-                    checked={selectedAnswer.includes(key)}
-                    onChange={() => handleAnswerChange(key)}
-                  />
-                  {value}
-                </label>
-              </div>
-            );
-          })}
-        <button type="button" onClick={handleSubmit}>
-          Submit Answer
-        </button>
+        {Object.entries(currentQuestion.answers).map(([key, value]) => {
+          if (!value) return null;
+          return (
+            <label key={key}>
+              <input
+                type="radio"
+                name="answer"
+                value={key}
+                checked={selectedAnswer.includes(key)}
+                onChange={() => handleAnswerChange(key)}
+              />
+              {value}
+            </label>
+          );
+        })}
+        <button onClick={handleSubmit}>Submit Answer</button>
       </form>
     </div>
   );
