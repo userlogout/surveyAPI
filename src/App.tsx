@@ -1,4 +1,4 @@
-import TestComponent from "./components/secondcomponent/TestCompnent";
+import TestComponent from "./components/secondcomponent/QuizCompnent";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 

@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchQuestionsThunk } from "../../api/connection";
 
-// type CorrectAnswers = {
-//   [key: string]: "true" | "false";
-// };
-
 interface Question {
   id: number;
   question: string;
