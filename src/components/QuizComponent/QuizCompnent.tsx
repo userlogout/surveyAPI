@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchQuestionsThunk } from "../../api/connection";
-import { answerQuestion, resetQuiz } from "../../redux/app/index"; // Импорт из slice
+import { answerQuestion, resetQuiz } from "../../redux/app/index";
 import {
   getCurrentQuestion,
   getShowResults,
@@ -76,6 +76,7 @@ const QuizComponent = () => {
                 checked={selectedAnswer.includes(key)}
                 onChange={() => handleAnswerChange(key)}
               />
+              {/* @ts-ignore */}
               {value}
             </label>
           );

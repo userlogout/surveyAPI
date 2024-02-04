@@ -46,7 +46,7 @@ export const fetchQuestionsThunk = createAsyncThunk(
               apiKey: apiKey,
               category: "Linux",
               difficulty: difficulty,
-              limit: 3,
+              limit: 2,
             },
           }
         );
@@ -58,6 +58,7 @@ export const fetchQuestionsThunk = createAsyncThunk(
             difficulty: difficulty,
           }));
           allQuestions = allQuestions.concat(questionsWithDifficulty);
+          console.log("allQuestions-->" + JSON.stringify(allQuestions));
         } else {
           throw new Error("Invalid API response");
         }
