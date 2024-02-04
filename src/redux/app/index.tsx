@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchQuestionsThunk } from "../../api/connection";
 
 type CorrectAnswers = {
-  [key: string]: string; // 'true' или 'false'
+  [key: string]: "true" | "false";
 };
 
 interface Question {
@@ -17,8 +17,15 @@ interface Question {
     answer_e: string | null;
     answer_f: string | null;
   };
-  multiple_correct_answers: string;
-  correct_answers: CorrectAnswers;
+  multiple_correct_answers: "true" | "false";
+  correct_answers: {
+    answer_a_correct: "true" | "false";
+    answer_b_correct: "true" | "false";
+    answer_c_correct: "true" | "false";
+    answer_d_correct: "true" | "false";
+    answer_e_correct: "true" | "false";
+    answer_f_correct: "true" | "false";
+  };
   correct_answer: string | null;
   explanation: string | null;
   tip: string | null;
@@ -37,6 +44,7 @@ interface QuizState {
   currentQuestionIndex: number;
   answers: Answer[];
   score: { easy: number; medium: number; hard: number };
+  totalAnswered: number;
   showResults: boolean;
   loading: boolean;
   error: string | null;
@@ -46,7 +54,12 @@ const initialState: QuizState = {
   questions: [],
   currentQuestionIndex: 0,
   answers: [],
-  score: { easy: 0, medium: 0, hard: 0 },
+  score: {
+    easy: 0,
+    medium: 0,
+    hard: 0,
+  },
+  totalAnswered: 0,
   showResults: false,
   loading: false,
   error: null,
@@ -64,15 +77,10 @@ const quizSlice = createSlice({
 
       if (!currentQuestion) return;
 
-      const isCorrect =
-        selectedAnswers.every(
-          (answer) =>
-            currentQuestion.correct_answers[`${answer}_correct`] === "true"
-        ) &&
-        selectedAnswers.length ===
-          Object.values(currentQuestion.correct_answers).filter(
-            (value) => value === "true"
-          ).length;
+      const isCorrect = selectedAnswers.every(
+        (answer) =>
+          currentQuestion.correct_answers[`${answer}_correct`] === "true"
+      );
 
       if (isCorrect) {
         state.score[
@@ -80,7 +88,9 @@ const quizSlice = createSlice({
         ]++;
       }
 
+      state.totalAnswered++;
       state.answers.push(action.payload);
+
       if (state.currentQuestionIndex < state.questions.length - 1) {
         state.currentQuestionIndex += 1;
       } else {
@@ -88,10 +98,7 @@ const quizSlice = createSlice({
       }
     },
     resetQuiz: (state) => {
-      state.currentQuestionIndex = 0;
-      state.answers = [];
-      state.score = { easy: 0, medium: 0, hard: 0 };
-      state.showResults = false;
+      Object.assign(state, initialState);
     },
   },
   extraReducers: (builder) => {
@@ -99,18 +106,15 @@ const quizSlice = createSlice({
       .addCase(fetchQuestionsThunk.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        fetchQuestionsThunk.fulfilled,
-        (state, action: PayloadAction<Question[]>) => {
-          state.questions = action.payload;
-          state.loading = false;
-          state.currentQuestionIndex = 0;
-          state.answers = [];
-          state.score = { easy: 0, medium: 0, hard: 0 };
-          state.showResults = false;
-        }
-      )
+      .addCase(fetchQuestionsThunk.fulfilled, (state, action) => {
+        state.questions = action.payload;
+        state.loading = false;
+        state.currentQuestionIndex = 0;
+        state.answers = [];
+        state.showResults = false;
+      })
       .addCase(fetchQuestionsThunk.rejected, (state, action) => {
+        // TypeScript также знает, что action.error может быть использовано здесь
         state.error = action.error.message ?? null;
         state.loading = false;
       });

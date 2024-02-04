@@ -2,30 +2,74 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // Определение типа для параметров функции
-interface FetchQuestionsParams {
+interface Question {
+  id: number;
+  question: string;
+  description: string | null;
+  answers: {
+    answer_a: string | null;
+    answer_b: string | null;
+    answer_c: string | null;
+    answer_d: string | null;
+    answer_e: string | null;
+    answer_f: string | null;
+  };
+  multiple_correct_answers: string; // "true" или "false"
+  correct_answers: {
+    answer_a_correct: string;
+    answer_b_correct: string;
+    answer_c_correct: string;
+    answer_d_correct: string;
+    answer_e_correct: string;
+    answer_f_correct: string;
+  };
+  correct_answer: string | null;
+  explanation: string | null;
+  tip: string | null;
+  tags: Array<{ name: string }>;
   category: string;
   difficulty: string;
-  limit: number;
 }
 
 export const fetchQuestionsThunk = createAsyncThunk(
   "quiz/fetchQuestions",
-  async (params: FetchQuestionsParams, { rejectWithValue }) => {
-    const { category, difficulty, limit } = params;
+  async (_, { rejectWithValue }) => {
     const apiKey = import.meta.env.VITE_QUIZ_API_KEY;
+    const difficulties = ["Easy", "Medium", "Hard"];
+    let allQuestions: Question[] = [];
+    // const limits = { Easy: 3, Medium: 3, Hard: 2 }; //  распределения
 
-    try {
-      const url = `https://quizapi.io/api/v1/questions?apiKey=${apiKey}&category=${category}&difficulty=${difficulty}&limit=${limit}`;
-      const response = await axios.get(url);
-      if (response.data && Array.isArray(response.data)) {
-        console.log("url" + JSON.stringify(response.data));
-        return response.data;
-      } else {
-        throw new Error("Invalid API response");
+    for (const difficulty of difficulties) {
+      try {
+        const response = await axios.get(
+          `https://quizapi.io/api/v1/questions`,
+          {
+            params: {
+              apiKey: apiKey,
+              category: "Linux",
+              difficulty: difficulty,
+              // limit: 5, // Количество вопросов для каждого уровня сложности
+              limit: 3,
+            },
+          }
+        );
+
+        if (response.data && Array.isArray(response.data)) {
+          // Добавляем уровень сложности к каждому вопросу
+          const questionsWithDifficulty = response.data.map((question) => ({
+            ...question,
+            difficulty: difficulty,
+          }));
+          allQuestions = allQuestions.concat(questionsWithDifficulty);
+        } else {
+          throw new Error("Invalid API response");
+        }
+      } catch (error) {
+        console.error(`Error fetching ${difficulty} questions:`, error);
+        return rejectWithValue("Failed to fetch questions");
       }
-    } catch (error) {
-      console.error("Error fetching trivia questions:", error);
-      return rejectWithValue("Failed to fetch questions");
     }
+
+    return allQuestions;
   }
 );

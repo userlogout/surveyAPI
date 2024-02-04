@@ -19,9 +19,7 @@ const QuizComponent = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
 
   useEffect(() => {
-    dispatch(
-      fetchQuestionsThunk({ category: "Linux", difficulty: "Easy", limit: 5 })
-    );
+    dispatch(fetchQuestionsThunk());
   }, [dispatch]);
 
   const handleAnswerChange = (answer: string) => {
