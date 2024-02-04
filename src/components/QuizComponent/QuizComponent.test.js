@@ -5,7 +5,6 @@ import { combineReducers } from "@reduxjs/toolkit";
 import quizReducer from "./path/to/quizSlice";
 import QuizComponent from "./path/to/QuizComponent";
 
-// Создаем моковый стор для тестов
 const createTestStore = () => {
   return createStore(combineReducers({ quiz: quizReducer }));
 };
@@ -18,11 +17,6 @@ describe("QuizComponent", () => {
         <QuizComponent />
       </Provider>
     );
-
-    // Проверяем, что компонент отображается
     expect(screen.getByText("Loading...")).toBeInTheDocument();
-
-    // Здесь можно добавить больше логики для тестирования взаимодействия пользователя с компонентом,
-    // например, выбор ответа и отправка формы
   });
 });
