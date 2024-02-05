@@ -34,7 +34,7 @@ interface Question {
 export const fetchQuestionsThunk = createAsyncThunk(
   "quiz/fetchQuestions",
   async (_, { rejectWithValue }) => {
-    // const apiKey = import.meta.env.VITE_QUIZ_API_KEY;
+    const apiKey = import.meta.env.VITE_QUIZ_API_KEY;
     const difficulties = ["Easy", "Medium", "Hard"];
     let allQuestions: Question[] = [];
     for (const difficulty of difficulties) {
@@ -43,7 +43,7 @@ export const fetchQuestionsThunk = createAsyncThunk(
           `https://quizapi.io/api/v1/questions`,
           {
             params: {
-              apiKey: "AoDhxHO4xEBPTkgEN0C94hDEoPCfarpYNJgwJ1bV",
+              apiKey: apiKey,
               category: "Linux",
               difficulty: difficulty,
               limit: 2,
