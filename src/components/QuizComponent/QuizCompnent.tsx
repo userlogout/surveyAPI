@@ -62,7 +62,9 @@ const QuizComponent = () => {
           onChange={() => {}}
           view="secondary"
           className={styles.greenButton}
-        ></Button>
+        >
+          Restart Quiz
+        </Button>
       </div>
     );
   }
@@ -89,7 +91,14 @@ const QuizComponent = () => {
             </label>
           );
         })}
-        <button onClick={handleSubmit}>Submit Answer</button>
+        <Button
+          onClick={handleSubmit}
+          onChange={() => {}}
+          view="secondary"
+          className={styles.greenButton}
+        >
+          Подтвердить
+        </Button>
       </form>
     </div>
   );
