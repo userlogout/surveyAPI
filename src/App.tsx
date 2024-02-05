@@ -7,7 +7,9 @@ function App() {
     <Provider store={store}>
       <div id="root">
         <div className="App">
-          <h1>Прохождение опроса</h1>
+          <div className="startText">
+            <h2>Прохождение опроса</h2>
+          </div>
           <QuizComponent />
         </div>
       </div>

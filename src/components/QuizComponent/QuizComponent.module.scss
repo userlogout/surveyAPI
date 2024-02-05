@@ -5,7 +5,16 @@
     linear-gradient(94deg, #19d13b 6.49%, #05c1f5 93.51%)
   );
 }
+.answerLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  margin-left: 8px;
+}
 
+.answerText {
+  margin-left: 8px;
+}
 .container {
   display: flex;
   flex-direction: column;

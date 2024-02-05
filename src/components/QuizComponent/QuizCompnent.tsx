@@ -9,7 +9,7 @@ import {
   getTotalScore,
   getDifficultyCount,
 } from "../../redux/app/selectors";
-import { Button } from "@salutejs/plasma-ui";
+import { Button, Radiobox } from "@salutejs/plasma-ui";
 import styles from "./QuizComponent.module.scss";
 import { AppDispatch } from "../../redux/store";
 
@@ -74,13 +74,13 @@ const QuizComponent = () => {
 
   return (
     <div>
-      <h2>{currentQuestion.question}</h2>
+      <h3>{currentQuestion.question}</h3>
       <form onSubmit={(e) => e.preventDefault()} className={styles.answers}>
         {Object.entries(currentQuestion.answers).map(([key, value]) => {
           if (!value) return null;
           return (
-            <label key={key}>
-              <input
+            <label key={key} className={styles.answerLabel}>
+              <Radiobox
                 type="radio"
                 name="answer"
                 value={key}
@@ -88,7 +88,7 @@ const QuizComponent = () => {
                 onChange={() => handleAnswerChange(key)}
               />
               {/* @ts-ignore */}
-              {value}
+              <span className={styles.answerText}>{value}</span>
             </label>
           );
         })}

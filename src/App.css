@@ -1,6 +1,10 @@
 * {
   font-family: "SB Sans Text";
 }
+.startText {
+  font-family: "SB Sans Text";
+  font-size: 28px;
+}
 
 #root {
   display: flex;

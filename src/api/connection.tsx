@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// Определение типа для параметров функции
 interface Question {
   id: number;
   question: string;
@@ -14,7 +13,7 @@ interface Question {
     answer_e: string | null;
     answer_f: string | null;
   };
-  multiple_correct_answers: string; // "true" или "false"
+  multiple_correct_answers: string;
   correct_answers: {
     answer_a_correct: string;
     answer_b_correct: string;
@@ -52,7 +51,6 @@ export const fetchQuestionsThunk = createAsyncThunk(
         );
 
         if (response.data && Array.isArray(response.data)) {
-          // Добавляем уровень сложности к каждому вопросу
           const questionsWithDifficulty = response.data.map((question) => ({
             ...question,
             difficulty: difficulty,
@@ -67,7 +65,6 @@ export const fetchQuestionsThunk = createAsyncThunk(
         return rejectWithValue("Failed to fetch questions");
       }
     }
-
     return allQuestions;
   }
 );
