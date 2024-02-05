@@ -5,9 +5,11 @@ import { store } from "./redux/store";
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
-        <h1>Прохождение опроса</h1>
-        <QuizComponent />
+      <div id="root">
+        <div className="App">
+          <h1>Прохождение опроса</h1>
+          <QuizComponent />
+        </div>
       </div>
     </Provider>
   );
