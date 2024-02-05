@@ -5,7 +5,7 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import QuizComponent from "./QuizCompnent.tsx";
+import { QuizComponent } from "./QuizCompnent.tsx";
 import mockQuestions from "./mockQuestions.js";
 
 const mock = new MockAdapter(axios);
