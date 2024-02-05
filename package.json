@@ -16,14 +16,20 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@reduxjs/toolkit": "^2.1.0",
+    "@salutejs/plasma-icons": "^1.179.0",
     "@salutejs/plasma-tokens": "^1.70.0",
+    "@salutejs/plasma-ui": "^1.230.0",
+    "@sberdevices/plasma-tokens": "^1.17.0",
     "axios": "^1.6.7",
     "cypress": "^13.6.4",
     "he": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
-    "redux-mock-store": "^1.5.4"
+    "redux-mock-store": "^1.5.4",
+    "sass": "^1.70.0",
+    "scss": "^0.2.4",
+    "styled-components": "^5.3.1"
   },
   "devDependencies": {
     "@testing-library/react": "^14.2.1",

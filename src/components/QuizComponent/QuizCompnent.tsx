@@ -9,6 +9,8 @@ import {
   getTotalScore,
   getDifficultyCount,
 } from "../../redux/app/selectors";
+import { Button } from "@salutejs/plasma-ui";
+import styles from "./QuizComponent.module.scss";
 import { AppDispatch } from "../../redux/store";
 
 const QuizComponent = () => {
@@ -54,7 +56,13 @@ const QuizComponent = () => {
         <p>
           Hard questions: {score.hard} / {difficultyCount.hard}
         </p>
-        <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button>
+        {/* <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button> */}
+        <Button
+          onClick={() => dispatch(resetQuiz())}
+          onChange={() => {}}
+          view="secondary"
+          className={styles.greenButton}
+        ></Button>
       </div>
     );
   }
