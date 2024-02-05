@@ -1,7 +1,9 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem; */
+  width: 100wh;
+  font-family: "SB Sans Text";
   text-align: center;
 }
 
