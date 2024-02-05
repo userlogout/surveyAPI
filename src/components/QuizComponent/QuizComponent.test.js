@@ -1,3 +1,11 @@
+// jest.mock("../api/connection", () => {
+//   return {
+//     fetchQuestions: jest.fn(() =>
+//       Promise.resolve(/* Мокированные данные ответа */)
+//     ),
+//     __esModule: true,
+//   };
+// });
 import React from "react";
 import { Provider } from "react-redux";
 import { render, fireEvent } from "@testing-library/react";
