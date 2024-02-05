@@ -44,27 +44,28 @@ const QuizComponent = () => {
 
   if (showResults) {
     return (
-      <div>
-        <h2>Results</h2>
-        <p>Your total score is: {totalScore}</p>
-        <p>
-          Easy questions: {score.easy} / {difficultyCount.easy}
-        </p>
-        <p>
-          Medium questions: {score.medium} / {difficultyCount.medium}
-        </p>
-        <p>
-          Hard questions: {score.hard} / {difficultyCount.hard}
-        </p>
-        {/* <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button> */}
-        <Button
-          onClick={() => dispatch(resetQuiz())}
-          onChange={() => {}}
-          view="secondary"
-          className={styles.greenButton}
-        >
-          Restart Quiz
-        </Button>
+      <div className={styles.container}>
+        <div className={styles.question}>
+          <h2>Results</h2>
+          <p>Your total score is: {totalScore}</p>
+          <p>
+            Easy questions: {score.easy} / {difficultyCount.easy}
+          </p>
+          <p>
+            Medium questions: {score.medium} / {difficultyCount.medium}
+          </p>
+          <p>
+            Hard questions: {score.hard} / {difficultyCount.hard}
+          </p>
+          <Button
+            onClick={() => dispatch(resetQuiz())}
+            onChange={() => {}}
+            view="secondary"
+            className={styles.greenButton}
+          >
+            Restart Quiz
+          </Button>
+        </div>
       </div>
     );
   }
@@ -74,7 +75,7 @@ const QuizComponent = () => {
   return (
     <div>
       <h2>{currentQuestion.question}</h2>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.answers}>
         {Object.entries(currentQuestion.answers).map(([key, value]) => {
           if (!value) return null;
           return (

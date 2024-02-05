@@ -4,3 +4,18 @@
     linear-gradient(94deg, #19d13b 6.49%, #05c1f5 93.51%)
   );
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 20px 0;
+}
