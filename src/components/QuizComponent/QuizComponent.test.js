@@ -1,47 +1,43 @@
-// QuizComponent.test.js
 import React from "react";
 import { Provider } from "react-redux";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import QuizComponent from "./QuizComponent";
+import QuizComponent from "./QuizCompnent.tsx";
+import mockQuestions from "./mockQuestions.js";
 
-// Настройка мок-адаптера для Axios
 const mock = new MockAdapter(axios);
 
-// Настройка мок-стора для Redux
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 describe("QuizComponent", () => {
+  mock.onGet("https://quizapi.io/api/v1/questions").reply(200, mockQuestions);
+
   it("renders and submits an answer", async () => {
-    // Мокирование данных, которые вернет API
-    const mockData = {
-      data: [],
-    };
-
-    // Запросы на этот URL будут возвращать мокированные данные
-    mock.onGet("https://quizapi.io/api/v1/questions").reply(200, mockData);
-
-    // Создание мок-стора с начальным состоянием
     const store = mockStore({
       quiz: {
-        questions: [],
+        questions: mockQuestions,
         currentQuestionIndex: 0,
-        // ... другие свойства состояния, если они есть
       },
     });
 
-    // Рендер компонента с мок-стором и провайдером
     const { getByText, getByLabelText } = render(
       <Provider store={store}>
         <QuizComponent />
       </Provider>
     );
 
-    // Имитация действий пользователя и проверка результатов
-    //
+    expect(getByText(mockQuestions[0].question)).toBeInTheDocument();
+
+    const answerOption = getByLabelText(mockQuestions[0].answers.answer_a);
+    fireEvent.click(answerOption);
+
+    const submitButton = getByText("Подтвердить");
+    fireEvent.click(submitButton);
+
+    expect(getByText(mockQuestions[1].question)).toBeInTheDocument();
   });
 });

@@ -1,10 +1,15 @@
 module.exports = {
   preset: "ts-jest",
-  testEnvironment: "jsdom", // Изменено с "node" на "jsdom"
+  testEnvironment: "jsdom",
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.json",
+    },
+  },
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
   moduleNameMapper: {
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy", // Для мокирования стилей
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
 };
