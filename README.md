@@ -1,7 +1,6 @@
 # Run
 
-git clone ..
-npm i
+npm i &&
 npm run dev
 
 # Project
