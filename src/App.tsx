@@ -1,6 +1,7 @@
-import QuizComponent from "./components/QuizComponent/QuizCompnent";
+import QuizComponent from "./components/QuizComponent/QuizComponent";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import "./App.css";
 
 function App() {
   return (

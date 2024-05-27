@@ -73,7 +73,7 @@ const QuizComponent = () => {
   if (!currentQuestion) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className={styles.questionsThemselves}>
       <h3>{currentQuestion.question}</h3>
       <form onSubmit={(e) => e.preventDefault()} className={styles.answers}>
         {Object.entries(currentQuestion.answers).map(([key, value]) => {

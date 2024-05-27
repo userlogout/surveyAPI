@@ -58,7 +58,7 @@ export const fetchQuestionsThunk = createAsyncThunk(
           allQuestions = allQuestions.concat(questionsWithDifficulty);
           console.log("allQuestions-->" + JSON.stringify(allQuestions));
         } else {
-          throw new Error("Invalid API response");
+          throw new Error("Invalid API");
         }
       } catch (error) {
         console.error(`Error fetching ${difficulty} questions:`, error);
